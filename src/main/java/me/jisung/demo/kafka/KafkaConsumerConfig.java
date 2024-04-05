@@ -36,14 +36,15 @@ public class KafkaConsumerConfig {
         // kafka cluster address setting
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
-        // 이건 무슨 설정이지..
+        // string->object deserializer setting
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 
-        // consumer group setting -> ConsumerGroup Setting 이유는?
+        // consumer group setting
         props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaConsumerGroup);
 
         // earliest : 가장 처음부터 읽기, latest : 가장 마지막부터 읽기
+        // consumer offset 을 사용할 수 없는 상태이거나 offset 정보를 찾을 수 없을떄의 option
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return new DefaultKafkaConsumerFactory<>(props);

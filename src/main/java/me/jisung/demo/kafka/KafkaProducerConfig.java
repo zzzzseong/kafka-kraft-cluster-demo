@@ -29,10 +29,11 @@ public class KafkaProducerConfig {
         // kafka cluster address setting
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
 
+        // object->string serializer setting
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
-        //producer acknowledge setting
+        // producer acknowledge setting
         props.put(ProducerConfig.ACKS_CONFIG, "1");
 
         return new DefaultKafkaProducerFactory<>(props);
