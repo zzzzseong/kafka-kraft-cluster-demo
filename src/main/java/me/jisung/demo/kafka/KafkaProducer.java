@@ -1,21 +1,19 @@
 package me.jisung.demo.kafka;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j(topic = "KafkaProducer")
 public class KafkaProducer {
-
-    private final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     public void produce(String topic, String message) {
-        logger.info("Produced message: " + message);
+        log.info("Produced message: {}", message);
         kafkaTemplate.send(topic, message);
     }
 }

@@ -1,17 +1,19 @@
 package me.jisung.demo.kafka;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j(topic = "KafkaConsumer")
 public class KafkaConsumer {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
-
-    @KafkaListener(topics = "topicA")
-    public void consumeA(String message) {
-        logger.info("Consumed message: " + message);
+    /**
+     * demo topic consume
+     * @param message consumed message
+     * */
+    @KafkaListener(topics = "${kafka.topic.demo}")
+    public void consumeDemo(String message) {
+        log.info("Consumed message: {}", message);
     }
 }
