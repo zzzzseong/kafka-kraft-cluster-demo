@@ -12,7 +12,7 @@ public class KafkaConsumer {
      * demo topic consume
      * @param message consumed message
      * */
-    @KafkaListener(topics = "${kafka.topic.demo}")
+    @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO)
     public void consumeDemo(String message) {
         log.info("Consumed message: {}", message);
     }

@@ -47,6 +47,10 @@ public class KafkaConsumerConfig {
         // consumer offset 을 사용할 수 없는 상태이거나 offset 정보를 찾을 수 없을떄의 option
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
+        // record를 읽어들이는 최소 byte size setting (default: 1byte)
+        // broker는 지정된 fetch.min.bytes 이상의 데이터를 받을때까지 대기한다.
+//        props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 8000000);
+
         return new DefaultKafkaConsumerFactory<>(props);
     }
 }
