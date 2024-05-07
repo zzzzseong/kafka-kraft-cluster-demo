@@ -18,7 +18,7 @@ public class DemoController {
     private final KafkaProducer kafkaProducer;
 
     @PostMapping("/produce/demo")
-    public ResponseEntity<Void> produce(@RequestBody MessageRequestDto request) {
+    public ResponseEntity<Void> produce(@RequestBody MessageRequestDto request) throws Exception {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_DEMO, request.getMessage());
         return ResponseEntity.ok().build();
     }
