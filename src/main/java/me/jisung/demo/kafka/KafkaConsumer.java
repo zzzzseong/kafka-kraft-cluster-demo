@@ -14,36 +14,27 @@ public class KafkaConsumer {
 
     /**
      * demo topic consume (auto commit)
-     * @param message consumed message
+     * @param record consumed message
      * */
     @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO)
-    public void consumeDemo(String message) {
-        log.info("Consumed message using string: {}", message);
-    }
-
-    /**
-     * demo topic consume (auto commit)
-     * @param payloads consumed message(List for fetch.min.bytes option)
-     * */
-    @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO)
-    public void consumeDemo(List<ConsumerRecord<Integer, String>> payloads) {
-        for (ConsumerRecord<Integer, String> payload : payloads) {
-            String message = payload.value();
-            log.info("Consumed message using consumer record: {}", message);
-        }
+    public void consumeDemo(ConsumerRecord<String, Object> record) {
+        // min.byte or max.wait.ms option을 이용한 batch consume시
+        // list로 받을 필요 없이 record로 받아으면 메서드가 여러번 호출된다.
+        log.info("Consumed message using consumer record: {}", record.value().toString());
     }
 
     /**
      * demo_manual topic consume (manual commit)
-     * @param payloads consumed message(List for fetch.min.bytes option)
+     * @param record consumed message(List for fetch.min.bytes option)
      * @param ack acknowledgment for manual commit
      * */
     @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO_MANUAL)
-    public void consumeDemoManual(List<ConsumerRecord<Integer, String>> payloads, Acknowledgment ack) {
-        for (ConsumerRecord<Integer, String> payload : payloads) {
-            String message = payload.value();
-            log.info("Consumed message: {}", message);
-        }
+    public void consumeDemoManual(ConsumerRecord<String, Object> record, Acknowledgment ack) {
+        log.info("Consumed message: {}", record.value().toString());
+
+        // data를 정상적으로 consume하고 partition offset을 manual commit.
         ack.acknowledge();
     }
+
+    //consume하는 과정에서 ack.acknowledge()를 호출해야만 다음 offset을 읽어오나??
 }
