@@ -36,6 +36,9 @@ public class KafkaProducerConfig {
         // producer acknowledge setting
         props.put(ProducerConfig.ACKS_CONFIG, "1");
 
+        // register custom partitioner
+        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);
+
         return new DefaultKafkaProducerFactory<>(props);
     }
 }
