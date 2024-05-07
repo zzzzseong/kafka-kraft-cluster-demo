@@ -24,7 +24,7 @@ public class KafkaProducer {
 
         SendResult<String, String> result = kafkaTemplate.send(record).get();
 
-        log.info("{}", result.toString());
+        log.info("{}", result);
     }
 
     /**
@@ -38,7 +38,7 @@ public class KafkaProducer {
 
         SendResult<String, String> result = kafkaTemplate.send(record).get();
 
-        log.info("{}", result.toString());
+        log.info("{}", result);
     }
 
     /**
@@ -53,6 +53,6 @@ public class KafkaProducer {
 
         SendResult<String, String> result = kafkaTemplate.send(record).get();
 
-        log.info("{}", result.toString());
+        log.info("{}", result);
     }
 }
