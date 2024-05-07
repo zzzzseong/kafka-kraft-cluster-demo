@@ -19,11 +19,11 @@ public class KafkaProducerConfig {
     private String bootstrapServers;
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public KafkaTemplate<String, String> kafkaTemplate() {
         return new KafkaTemplate<>(kafkaProducerFactory());
     }
 
-    private ProducerFactory<String, Object> kafkaProducerFactory() {
+    private ProducerFactory<String, String> kafkaProducerFactory() {
         Map<String, Object> props = new HashMap<>();
 
         // kafka cluster address setting
@@ -37,7 +37,7 @@ public class KafkaProducerConfig {
         props.put(ProducerConfig.ACKS_CONFIG, "1");
 
         // register custom partitioner
-        props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);
+        /*props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, CustomPartitioner.class);*/
 
         return new DefaultKafkaProducerFactory<>(props);
     }

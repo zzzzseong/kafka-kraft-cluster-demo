@@ -20,14 +20,18 @@ public class KafkaConsumerConfig {
     private String bootstrapServers;
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+
         factory.setConsumerFactory(consumerFactory());
+
+        // fetcher를 이용해 batch로 record를 읽어들이기 위한 설정 (ConsumerRecords 사용)
+        factory.setBatchListener(true);
 
         return factory;
     }
 
-    private ConsumerFactory<String, Object> consumerFactory() {
+    private ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
 
         // kafka cluster address setting
@@ -44,13 +48,13 @@ public class KafkaConsumerConfig {
         // consumer offset 을 사용할 수 없는 상태이거나 offset 정보를 찾을 수 없을떄의 option
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        // auto commit: true
-        // manual commit: false
+        // auto commit(true), manual commit(false)
         /* props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false); */
 
         // record를 읽어들이는 최소 byte size setting (default: 1byte)
-        // broker는 지정된 fetch.min.bytes 이상의 데이터를 받을때까지 대기한다.
          props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 1000);
+
+        // 지정된 fetch.min.bytes 이상의 데이터를 받을때까지 대기한다.
          props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 10000);
 
         return new DefaultKafkaConsumerFactory<>(props);
