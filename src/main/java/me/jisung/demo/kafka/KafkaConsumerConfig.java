@@ -25,7 +25,7 @@ public class KafkaConsumerConfig {
 
         factory.setConsumerFactory(consumerFactory());
 
-        // fetcher를 이용해 batch로 record를 읽어들이기 위한 설정 (ConsumerRecords 사용)
+        // fetcher를 이용해 batch로 record를 읽어들이기 위한 설정 (ConsumerRecords 사용 가능)
         factory.setBatchListener(true);
 
         return factory;
@@ -52,10 +52,10 @@ public class KafkaConsumerConfig {
         /* props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false); */
 
         // record를 읽어들이는 최소 byte size setting (default: 1byte)
-         props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 1000);
+        /* props.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 1024);*/
 
-        // 지정된 fetch.min.bytes 이상의 데이터를 받을때까지 대기한다.
-         props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 10000);
+        // 최소 byte size 만큼의 record가 fetcher에 적재되기까지 기다리는 최대 대기 시간(milli-seconds)
+        /* props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1024);*/
 
         return new DefaultKafkaConsumerFactory<>(props);
     }
