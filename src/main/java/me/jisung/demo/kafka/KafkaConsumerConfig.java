@@ -15,10 +15,6 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
-
-    @Value("${kafka.bootstrap-servers}")
-    private String bootstrapServers;
-
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -38,7 +34,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
 
         // kafka cluster address setting
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConst.BOOTSTRAP_SERVER);
 
         // string->object deserializer setting
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -65,6 +61,9 @@ public class KafkaConsumerConfig {
 
         // consumer offset commit interval setting (default: 5000ms)
         /* props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 3000);*/
+
+        // transaction consumer setting
+        /* props.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");*/
 
         return new DefaultKafkaConsumerFactory<>(props);
     }

@@ -48,4 +48,13 @@ public class KafkaConsumer {
 
         ack.acknowledge();
     }
+
+    @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_STREAMS_FILTER)
+    public void streams(ConsumerRecords<String, String> records) {
+        Flux.fromIterable(records)
+                .subscribeOn(Schedulers.boundedElastic())
+                .doOnNext(record -> log.info("{}", record))
+                .doOnError((e) -> log.error(e.getMessage(), e))
+                .subscribe();
+    }
 }
