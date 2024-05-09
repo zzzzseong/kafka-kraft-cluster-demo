@@ -60,6 +60,12 @@ public class KafkaConsumerConfig {
         // 최소 byte size 만큼의 record가 fetcher에 적재되기까지 기다리는 최대 대기 시간(milli-seconds)
         /* props.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 1024);*/
 
+        // 토픽 자동 생성 설정
+        props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
+
+        // consumer offset commit interval setting (default: 5000ms)
+        /* props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 3000);*/
+
         return new DefaultKafkaConsumerFactory<>(props);
     }
 }

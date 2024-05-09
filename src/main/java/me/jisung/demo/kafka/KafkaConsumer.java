@@ -6,6 +6,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 import java.util.List;
 
@@ -19,7 +21,15 @@ public class KafkaConsumer {
      * */
     @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO)
     public void consumeDemo(ConsumerRecords<String, String> records) {
-        for (ConsumerRecord<String, String> record : records) log.info("{}", record);
+
+        Flux.fromIterable(records)
+                .subscribeOn(Schedulers.boundedElastic())
+                .doOnNext(record -> {
+                    log.info("{}", record);
+                })
+                .onErrorContinue((e, record) -> {
+                    log.error(e.getMessage(), e);
+                }).subscribe();
     }
 
     /**
@@ -30,9 +40,15 @@ public class KafkaConsumer {
     @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO_MANUAL)
     public void consumeDemoManual(ConsumerRecords<String, String> records, Acknowledgment ack) {
 
-        for (ConsumerRecord<String, String> record : records) log.info("{}", record);
+        Flux.fromIterable(records)
+                .subscribeOn(Schedulers.boundedElastic())
+                .doOnNext(record -> {
+                    log.info("{}", record);
+                })
+                .onErrorContinue((e, record) -> {
+                    log.error(e.getMessage(), e);
+                }).subscribe();
 
-        // data를 정상적으로 consume하고 partition offset을 manual commit.
         ack.acknowledge();
     }
 }
