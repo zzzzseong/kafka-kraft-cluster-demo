@@ -22,14 +22,14 @@ public class KafkaConsumer {
     @KafkaListener(topics = KafkaConst.KAFKA_TOPIC_DEMO)
     public void consumeDemo(ConsumerRecords<String, String> records) {
 
+        // Schedulers.boundsElastic()
+        // Reactor에서 제공하는 Scheduler로 비동기 작업을 처리하고, boundedElastic으로 동적으로 크기를 조절하는 스레드 풀 사용
+
         Flux.fromIterable(records)
                 .subscribeOn(Schedulers.boundedElastic())
-                .doOnNext(record -> {
-                    log.info("{}", record);
-                })
-                .onErrorContinue((e, record) -> {
-                    log.error(e.getMessage(), e);
-                }).subscribe();
+                .doOnNext(record -> log.info("{}", record))
+                .doOnError((e) -> log.error(e.getMessage(), e))
+                .subscribe();
     }
 
     /**
@@ -42,12 +42,9 @@ public class KafkaConsumer {
 
         Flux.fromIterable(records)
                 .subscribeOn(Schedulers.boundedElastic())
-                .doOnNext(record -> {
-                    log.info("{}", record);
-                })
-                .onErrorContinue((e, record) -> {
-                    log.error(e.getMessage(), e);
-                }).subscribe();
+                .doOnNext(record -> log.info("{}", record))
+                .doOnError((e) -> log.error(e.getMessage(), e))
+                .subscribe();
 
         ack.acknowledge();
     }
