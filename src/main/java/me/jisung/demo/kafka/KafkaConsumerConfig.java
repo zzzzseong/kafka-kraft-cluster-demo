@@ -28,6 +28,9 @@ public class KafkaConsumerConfig {
         // fetcher를 이용해 batch로 record를 읽어들이기 위한 설정 (ConsumerRecords 사용 가능)
         factory.setBatchListener(true);
 
+        // RebalanceListener 등록
+        factory.getContainerProperties().setConsumerRebalanceListener(new RebalanceListener());
+
         return factory;
     }
 

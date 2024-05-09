@@ -20,7 +20,7 @@ public class DemoController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/produce/demo")
+    @PostMapping("/produce/demo2")
     public ResponseEntity<Void> produce(
             @RequestBody MessageRequestDto request,
             @RequestParam(name = "key") String key
@@ -29,7 +29,7 @@ public class DemoController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/produce/demo")
+    @PostMapping("/produce/demo3")
     public ResponseEntity<Void> produce(
             @RequestBody MessageRequestDto request,
             @RequestParam(name = "partitionNo") Integer partitionNo,
