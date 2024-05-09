@@ -2,9 +2,11 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%clr(%d{HH:mm:ss.SSS}){green} [%thread] %clr(%-5level) %clr(%logger{36}){blue} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -24,6 +26,7 @@
 
     <root level="info">
         <appender-ref ref="rolling" />
+        <appender-ref ref="console" />
     </root>
 
 </configuration>
