@@ -38,4 +38,10 @@ public class DemoController {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_DEMO, partitionNo, key, request.getMessage());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/produce/demo4")
+    public ResponseEntity<Void> streams(@RequestBody MessageRequestDto request) throws Exception {
+        kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_STREAMS, request.getMessage());
+        return ResponseEntity.ok().build();
+    }
 }
