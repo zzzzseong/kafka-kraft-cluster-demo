@@ -7,6 +7,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j(topic = "KafkaProducer")
@@ -22,9 +25,13 @@ public class KafkaProducer {
     public void produce(String topic, String message) throws Exception {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
 
-        SendResult<String, String> result = kafkaTemplate.send(record).get();
+        // synchronous send - timeout 10s
+        SendResult<String, String> result = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
+        handleResult(result);
 
-        log.info("{}", result);
+        // asynchronous send
+        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(record);
+        future.whenComplete((r, e) -> handleResult(r));
     }
 
     /**
@@ -37,8 +44,7 @@ public class KafkaProducer {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, message);
 
         SendResult<String, String> result = kafkaTemplate.send(record).get();
-
-        log.info("{}", result);
+        handleResult(result);
     }
 
     /**
@@ -52,7 +58,10 @@ public class KafkaProducer {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, partitionNo, key, message);
 
         SendResult<String, String> result = kafkaTemplate.send(record).get();
+        handleResult(result);
+    }
 
+    private void handleResult(SendResult<String, String> result) {
         log.info("{}", result);
     }
 }
