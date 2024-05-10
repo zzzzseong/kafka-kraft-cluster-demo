@@ -8,7 +8,9 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Component
 @RequiredArgsConstructor
@@ -22,16 +24,8 @@ public class KafkaProducer {
      * @param topic topic name
      * @param message produce message
      * */
-    public void produce(String topic, String message) throws Exception {
-        ProducerRecord<String, String> record = new ProducerRecord<>(topic, message);
-
-        // synchronous send - timeout 10s
-        SendResult<String, String> result = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
-        handleResult(result);
-
-        // asynchronous send
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(record);
-        future.whenComplete((r, e) -> handleResult(r));
+    public void produce(String topic, String message) {
+        produce(topic, null, null, message);
     }
 
     /**
@@ -40,11 +34,8 @@ public class KafkaProducer {
      * @param key record hash key
      * @param message produce message
      * */
-    public void produce(String topic, String key, String message) throws Exception {
-        ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, message);
-
-        SendResult<String, String> result = kafkaTemplate.send(record).get();
-        handleResult(result);
+    public void produce(String topic, String key, String message) {
+        produce(topic, null, key, message);
     }
 
     /**
@@ -54,14 +45,32 @@ public class KafkaProducer {
      * @param key record hash key
      * @param message produce message
      * */
-    public void produce(String topic, Integer partitionNo, String key, String message) throws Exception {
+    public void produce(String topic, Integer partitionNo, String key, String message) {
         ProducerRecord<String, String> record = new ProducerRecord<>(topic, partitionNo, key, message);
 
-        SendResult<String, String> result = kafkaTemplate.send(record).get();
-        handleResult(result);
+        try {
+            SendResult<String, String> result = kafkaTemplate.send(record).get(10, TimeUnit.SECONDS);
+            handleResult(result);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            handleResult(e);
+        }
+
+        // asynchronous send - future는 비동기 연산에 대한 결과를 표현하는 객체이다.
+        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(record);
+        future.whenComplete(this::handleResult);
     }
 
+
     private void handleResult(SendResult<String, String> result) {
-        log.info("{}", result);
+        handleResult(result, null);
+    }
+
+    private void handleResult(Throwable e) {
+        handleResult(null, e);
+    }
+
+    private void handleResult(SendResult<String, String> result, Throwable e) {
+        if (e != null) log.error("{}", e.toString());
+        else log.info("{}", result);
     }
 }

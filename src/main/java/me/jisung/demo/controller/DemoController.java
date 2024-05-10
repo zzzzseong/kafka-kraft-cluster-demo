@@ -15,7 +15,7 @@ public class DemoController {
     private final KafkaProducer kafkaProducer;
 
     @PostMapping("/produce/demo")
-    public ResponseEntity<Void> produce(@RequestBody MessageRequestDto request) throws Exception {
+    public ResponseEntity<Void> produce(@RequestBody MessageRequestDto request) {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_DEMO, request.getMessage());
         return ResponseEntity.ok().build();
     }
@@ -24,7 +24,7 @@ public class DemoController {
     public ResponseEntity<Void> produce(
             @RequestBody MessageRequestDto request,
             @RequestParam(name = "key") String key
-    ) throws Exception {
+    ) {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_DEMO, key, request.getMessage());
         return ResponseEntity.ok().build();
     }
@@ -34,13 +34,13 @@ public class DemoController {
             @RequestBody MessageRequestDto request,
             @RequestParam(name = "partitionNo") Integer partitionNo,
             @RequestParam(name = "key") String key
-    ) throws Exception {
+    ) {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_DEMO, partitionNo, key, request.getMessage());
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/produce/demo4")
-    public ResponseEntity<Void> streams(@RequestBody MessageRequestDto request) throws Exception {
+    public ResponseEntity<Void> streams(@RequestBody MessageRequestDto request) {
         kafkaProducer.produce(KafkaConst.KAFKA_TOPIC_STREAMS, request.getMessage());
         return ResponseEntity.ok().build();
     }
