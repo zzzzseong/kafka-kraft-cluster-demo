@@ -7,6 +7,7 @@ public interface KafkaConst {
 
     String BOOTSTRAP_SERVER = "localhost:9092,localhost:9094,localhost:9096";
     String CONSUMER_GROUP = "demo-group";
+    String STREAMS_ID = "streams-demo";
 
     /* topics */
     String KAFKA_TOPIC_DEMO = "demo";

@@ -31,7 +31,7 @@ public class KafkaStreamsConfig {
     private StreamsConfig streamsConfig() {
         Map<String, Object> props = new HashMap<>();
 
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-streams-id");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, KafkaConst.STREAMS_ID);
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConst.BOOTSTRAP_SERVER);
 
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());

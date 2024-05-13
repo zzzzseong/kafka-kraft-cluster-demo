@@ -7,7 +7,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.springframework.stereotype.Component;
 
 /**
- * KafkaStreamsConfig
+ * Kafka Streams를 시작하는 Class
  * */
 @Component
 @RequiredArgsConstructor
